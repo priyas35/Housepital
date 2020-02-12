@@ -1,5 +1,7 @@
 package com.squad.housepital.repository;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,5 +18,7 @@ public interface DoctorSlotRepository extends JpaRepository<DoctorSlot, Integer>
 	List<DoctorSlot> findByDoctorAndAvailability(Doctor doctor,String availability);
 
 	Optional<DoctorSlot> findByHospital(Hospital hospitals);
+
+	Optional<DoctorSlot> findByDoctorAndDateAndSlotTime(Doctor doctor, LocalDate date, LocalTime fromTime);
 
 }

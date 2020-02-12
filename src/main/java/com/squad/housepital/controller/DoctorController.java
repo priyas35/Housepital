@@ -30,22 +30,43 @@ import com.squad.housepital.service.DoctorService;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * This class performs the operations related to the doctor like Login,Add
+ * Appointment slot and Check appointment slots
+ * 
+ * @author Chethana M
+ * @since Feb-12-2020
+ * @version v1.0
+ *
+ */
 @RestController
 @RequestMapping("/doctors")
 @CrossOrigin
 @Slf4j
 public class DoctorController {
-	
+
 	@Autowired
 	DoctorService doctorService;
-	
+
+	/**
+	 * This method is used to add the appointment slot for doctor on any particular
+	 * day based on doctor availability
+	 * 
+	 * @author Chethana M
+	 * @param appointmentRequestDto- Takes appointment Details to be persisted
+	 * @return ResponseDto - Returns success/failure status code with message
+	 * @throws DoctorNotFoundException   - thrown when Parsed Doctor Id is invalid
+	 * @throws HospitalNotFoundException - thrown when Parsed HospitalId is invalid
+	 * @since Feb-12-2020
+	 */
 	@PostMapping("/appointments")
-	public ResponseEntity<ResponseDto> addAppointmentSlot(@RequestBody AppointmentRequestDto appointmentRequestDto) throws DoctorNotFoundException, HospitalNotFoundException{
+	public ResponseEntity<ResponseDto> addAppointmentSlot(@RequestBody AppointmentRequestDto appointmentRequestDto)
+			throws DoctorNotFoundException, HospitalNotFoundException {
 		log.info("Entering into addAppointmentSlot of DoctorController");
-		ResponseDto responseDto=doctorService.addAppointmentSlot(appointmentRequestDto);
+		ResponseDto responseDto = doctorService.addAppointmentSlot(appointmentRequestDto);
 		responseDto.setStatusCode(HttpStatus.OK.value());
 		responseDto.setStatusMessage("Success");
-		return new ResponseEntity<>(responseDto,HttpStatus.OK);
+		return new ResponseEntity<>(responseDto, HttpStatus.OK);
 	}
 
 	/**

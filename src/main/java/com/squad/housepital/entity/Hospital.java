@@ -10,15 +10,15 @@ import lombok.Data;
 @Data
 @Entity
 public class Hospital {
-	
+
 	@Id
 	private Integer hospitalId;
 	private String hospitalName;
-	
+
 	@OneToOne
 	@JoinColumn(name = "location_id")
 	private Location location;
-	
+
 	private String address;
-	
+
 }

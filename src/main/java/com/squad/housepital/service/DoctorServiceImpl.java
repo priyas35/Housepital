@@ -82,7 +82,8 @@ public class DoctorServiceImpl implements DoctorService {
 
 	/**
 	 * @author PriyaDharshini S.
-	 * @since 2020-02-12. this method will get the available slots for the doctor on the patient side.
+	 * @since 2020-02-12. this method will get the available slots for the doctor on
+	 *        the patient side.
 	 * @param doctorId - unique id of doctor
 	 * @return list of SlotDto which has available slots and details.
 	 * @throws DoctorNotFoundException it will throw the exception if the doctor is
@@ -92,14 +93,16 @@ public class DoctorServiceImpl implements DoctorService {
 	public List<SlotDto> getSlotsForPatient(Integer doctorId) throws DoctorNotFoundException, SlotNotFoundException {
 		Optional<Doctor> doctor = doctorRepository.findById(doctorId);
 		if (!doctor.isPresent()) {
-			log.debug("Exception occurred in DoctorServiceImpl getDoctorDetails method:" + Constant.DOCTOR_NOT_FOUND);
+			log.debug("Exception occurred in DoctorServiceImpl getSlotsForPatient method:" + Constant.DOCTOR_NOT_FOUND);
 			throw new DoctorNotFoundException(Constant.DOCTOR_NOT_FOUND);
 		}
 		List<DoctorSlot> doctorSlots = doctorSlotRepository.findByDoctorAndAvailability(doctor.get(),
 				Constant.AVAILABLE);
 		if (doctorSlots.isEmpty()) {
+			log.debug("Exception occurred in DoctorServiceImpl getSlotsForPatient method:" + Constant.SLOT_NOT_FOUND);
 			throw new SlotNotFoundException(Constant.SLOT_NOT_FOUND);
 		}
+		log.debug("Entering into DoctorServiceImpl getSlotsForPatient method: getting available slots");
 		List<SlotDto> slotList = new ArrayList<>();
 		doctorSlots.forEach(slots -> {
 			SlotDto slotDto = new SlotDto();
@@ -113,30 +116,34 @@ public class DoctorServiceImpl implements DoctorService {
 		return slotList;
 
 	}
-	
+
 	/**
 	 * @author PriyaDharshini S.
-	 * @since 2020-02-12. this method will get the booked slots for the doctor on the doctor side.
+	 * @since 2020-02-12. this method will get the booked slots for the doctor on
+	 *        the doctor side.
 	 * @param doctorId - unique id of doctor
 	 * @return list of AvailableSlotDto which has booked slots and details.
 	 * @throws DoctorNotFoundException it will throw the exception if the doctor is
 	 *                                 not registered.
 	 * 
 	 */
-	public List<AvailableSlotDto> getSlotsForDoctor(Integer doctorId) throws DoctorNotFoundException, SlotNotFoundException {
+	public List<AvailableSlotDto> getSlotsForDoctor(Integer doctorId)
+			throws DoctorNotFoundException, SlotNotFoundException {
 		Optional<Doctor> doctor = doctorRepository.findById(doctorId);
 		if (!doctor.isPresent()) {
-			log.debug("Exception occurred in DoctorServiceImpl getDoctorDetails method:" + Constant.DOCTOR_NOT_FOUND);
+			log.debug("Exception occurred in DoctorServiceImpl getSlotsForDoctor method:" + Constant.DOCTOR_NOT_FOUND);
 			throw new DoctorNotFoundException(Constant.DOCTOR_NOT_FOUND);
 		}
 		List<DoctorSlot> doctorSlots = doctorSlotRepository.findByDoctorAndAvailability(doctor.get(),
 				Constant.UN_AVAILABLE);
 		if (doctorSlots.isEmpty()) {
+			log.debug("Exception occurred in DoctorServiceImpl getSlotsForDoctor method:" + Constant.SLOT_NOT_FOUND);
 			throw new SlotNotFoundException(Constant.SLOT_NOT_FOUND);
 		}
+		log.debug("Entering into DoctorServiceImpl getSlotsForDoctor method: getting booked slots");
 		List<AvailableSlotDto> slotList = new ArrayList<>();
 		doctorSlots.forEach(slots -> {
-			AvailableSlotDto availableSlotDto  = new AvailableSlotDto();
+			AvailableSlotDto availableSlotDto = new AvailableSlotDto();
 			availableSlotDto.setDate(slots.getDate());
 			availableSlotDto.setHospitalId(slots.getHospital().getHospitalId());
 			availableSlotDto.setHospitalName(slots.getHospital().getHospitalName());
@@ -151,6 +158,5 @@ public class DoctorServiceImpl implements DoctorService {
 		return slotList;
 
 	}
-
 
 }

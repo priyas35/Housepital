@@ -18,5 +18,7 @@ public class Constant {
 	public static final String AVAILABLE = "Available";
 	public static final String UN_AVAILABLE = "Unavailable";
 	
+	public static final Integer SLOT_INTERVAL=15;
+
 
 }

@@ -13,11 +13,11 @@ import com.squad.housepital.exception.SlotNotFoundException;
 public interface DoctorService {
 
 	LoginResponseDto authenticateDoctor(LoginRequestDto loginRequestDto) throws DoctorNotFoundException;
-	
+
 	DoctorDto getDoctorDetails(Integer doctorId) throws DoctorNotFoundException;
-	
+
 	List<SlotDto> getSlotsForPatient(Integer doctorId) throws DoctorNotFoundException, SlotNotFoundException;
-	
-	List<AvailableSlotDto> getSlotsForDoctor(Integer doctorId) throws DoctorNotFoundException, SlotNotFoundException ;
+
+	List<AvailableSlotDto> getSlotsForDoctor(Integer doctorId) throws DoctorNotFoundException, SlotNotFoundException;
 
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.squad.housepital.constant.Constant;
 import com.squad.housepital.dto.BookSlotRequestDto;
 import com.squad.housepital.dto.ResponseDto;
 import com.squad.housepital.entity.DoctorSlot;
@@ -42,15 +43,16 @@ public class PatientServiceImpl implements PatientService {
 		log.info("PatientServiceImpl bookSlot ---> saving patient");
 		Patient patient = new Patient();
 		BeanUtils.copyProperties(bookSlotRequestDto, patient);
-		patientRepository.save(patient);
+		patient = patientRepository.save(patient);
 		log.info("PatientServiceImpl bookSlot ---> patient saved");
 		
 		Optional<DoctorSlot> doctorSlot = doctorSlotRepository.findById(bookSlotRequestDto.getDoctorSlotId());
 		if(!doctorSlot.isPresent()) {
-			throw new SlotNotFoundException("slot not found");
+			throw new SlotNotFoundException(Constant.SLOT_NOT_FOUND);
 		}
 		log.info("PatientServiceImpl bookSlot ---> booking slot");
-		doctorSlot.get().setAvailability("no");
+		doctorSlot.get().setAvailability(Constant.UN_AVAILABLE);
+		doctorSlot.get().setPatient(patient);
 		doctorSlotRepository.save(doctorSlot.get());
 		log.info("PatientServiceImpl bookSlot ---> slot booked");
 		return new ResponseDto();

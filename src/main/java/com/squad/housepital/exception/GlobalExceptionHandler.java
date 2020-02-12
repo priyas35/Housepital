@@ -8,18 +8,24 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.squad.housepital.dto.ErrorDto;
 
-
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-	
+
 	@ExceptionHandler(SlotNotFoundException.class)
-	public ResponseEntity<ErrorDto> slotNotFoundException(SlotNotFoundException e){
-		
+	public ResponseEntity<ErrorDto> slotNotFoundException(SlotNotFoundException e) {
+
 		ErrorDto errorDto = new ErrorDto();
 		errorDto.setMessage(e.getMessage());
 		errorDto.setStatusCode(HttpStatus.NOT_FOUND.value());
 		return ResponseEntity.ok().body(errorDto);
 	}
 
+	@ExceptionHandler(DoctorNotFoundException.class)
+	public ResponseEntity<ErrorDto> doctorNotFoundException(DoctorNotFoundException e) {
+		ErrorDto errorDto = new ErrorDto();
+		errorDto.setMessage(e.getMessage());
+		errorDto.setStatusCode(HttpStatus.NOT_FOUND.value());
+		return ResponseEntity.status(HttpStatus.OK).body(errorDto);
+	}
 
 }

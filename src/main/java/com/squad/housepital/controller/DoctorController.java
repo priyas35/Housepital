@@ -11,5 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin
 @Slf4j
 public class DoctorController {
+	
+	
 
 }

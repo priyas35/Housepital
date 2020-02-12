@@ -1,5 +1,6 @@
 package com.squad.housepital.dto;
 
+
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;

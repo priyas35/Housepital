@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.squad.housepital.constant.Constant;
 import com.squad.housepital.dto.ErrorDto;
 
 
@@ -35,7 +36,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		body.put("errors", errors);
 		return new ResponseEntity<>(body, headers, HttpStatus.OK);
 	}
-
+	
+	@ExceptionHandler(DoctorNotFoundException.class)
+	public ResponseEntity<ErrorDto> doctorNotFoundException(DoctorNotFoundException ex) {
+		ErrorDto errorDto = new ErrorDto();
+		errorDto.setMessage(Constant.DOCTOR_NOT_FOUND);
+		errorDto.setStatusCode(HttpStatus.NOT_FOUND.value());
+		return ResponseEntity.status(HttpStatus.OK).body(errorDto);
+	}
+		
 	@ExceptionHandler(HospitalNotFoundException.class)
 	public ResponseEntity<ErrorDto> hospitalNotFoundException(Exception e){
 		ErrorDto errorDto= new ErrorDto();
@@ -44,11 +53,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(HttpStatus.OK).body(errorDto);
 	}
 	
-	@ExceptionHandler(DoctorNotFoundException.class)
-	public ResponseEntity<ErrorDto> doctorNotFoundException(Exception e){
-		ErrorDto errorDto= new ErrorDto();
-		errorDto.setMessage(e.getMessage());
-		errorDto.setStatusCode(HttpStatus.NOT_FOUND.value());
-		return ResponseEntity.status(HttpStatus.OK).body(errorDto);
-	}
 }

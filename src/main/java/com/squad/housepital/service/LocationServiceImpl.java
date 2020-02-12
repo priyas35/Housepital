@@ -33,9 +33,12 @@ public class LocationServiceImpl implements LocationService {
 	/**
 	 * 
 	 * @author Raghu.
+	 * 
+	 *         This method will get all the locations
+	 * 
 	 * @since 2020-02-05. This method will get all the locations
 	 * @param none
-	 * @return list of all location.
+	 * @ @return list of all location.
 	 * 
 	 */
 	@Override
@@ -47,9 +50,11 @@ public class LocationServiceImpl implements LocationService {
 	/**
 	 * 
 	 * @author Raghu.
-	 * @since 2020-02-05. This method will get all the doctors in a particular
-	 *        location and filter the doctors based on name, specialization and
-	 *        email
+	 * 
+	 *         This method will get all the doctors in a particular location and
+	 *         filter the doctors based on name, specialization and email
+	 * 
+	 * @since 2020-02-05.
 	 * @param location id as Integer and filter name as String.
 	 * @return list of doctors for a particular location.
 	 * 

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.squad.housepital.dto.DoctorSearchResponseDto;
 import com.squad.housepital.entity.Location;
-import com.squad.housepital.service.DoctorService;
 import com.squad.housepital.service.LocationService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +29,10 @@ public class LocationController {
 	/**
 	 * 
 	 * @author Raghu.
-	 * @since 2020-02-05. This method will get all the locations
+	 * 
+	 *         This method will get all the locations
+	 * 
+	 * @since 2020-02-05.
 	 * @param none
 	 * @return list of all location.
 	 * 
@@ -44,9 +46,11 @@ public class LocationController {
 	/**
 	 * 
 	 * @author Raghu.
-	 * @since 2020-02-05. This method will get all the doctors in a particular
-	 *        location and filter the doctors based on name, specialization and
-	 *        email
+	 * 
+	 *         This method will get all the doctors in a particular location and
+	 *         filter the doctors based on name, specialization and email
+	 * 
+	 * @since 2020-02-05.
 	 * @param location id as Integer and filter name as String.
 	 * @return list of doctors for a particular location.
 	 * 

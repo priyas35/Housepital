@@ -1,5 +1,6 @@
 package com.squad.housepital.service;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -9,17 +10,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.squad.housepital.constant.Constant;
+import com.squad.housepital.dto.AppointmentRequestDto;
 import com.squad.housepital.dto.AvailableSlotDto;
 import com.squad.housepital.dto.DoctorDto;
 import com.squad.housepital.dto.LoginRequestDto;
 import com.squad.housepital.dto.LoginResponseDto;
+import com.squad.housepital.dto.ResponseDto;
 import com.squad.housepital.dto.SlotDto;
 import com.squad.housepital.entity.Doctor;
 import com.squad.housepital.entity.DoctorSlot;
+import com.squad.housepital.entity.Hospital;
 import com.squad.housepital.exception.DoctorNotFoundException;
+import com.squad.housepital.exception.HospitalNotFoundException;
 import com.squad.housepital.exception.SlotNotFoundException;
 import com.squad.housepital.repository.DoctorRepository;
 import com.squad.housepital.repository.DoctorSlotRepository;
+import com.squad.housepital.repository.HospitalRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,11 +37,66 @@ public class DoctorServiceImpl implements DoctorService {
 	DoctorRepository doctorRepository;
 
 	@Autowired
+	HospitalRepository hospitalRepository;
+
+	@Autowired
 	DoctorSlotRepository doctorSlotRepository;
 
 	/**
+	 * This method is used to add the appointment slot for doctor on any particular
+	 * day based on doctor availability
+	 * 
+	 * @author Chethana M
+	 * @param appointmentRequestDto- Takes appointment Details to be persisted
+	 * @return ResponseDto - Returns success/failure status code with message
+	 * @throws DoctorNotFoundException   - thrown when Parsed Doctor Id is invalid
+	 * @throws HospitalNotFoundException - thrown when Parsed HospitalId is invalid
+	 * @since Feb-12-2020
+	 */
+	public ResponseDto addAppointmentSlot(AppointmentRequestDto appointmentRequestDto)
+			throws DoctorNotFoundException, HospitalNotFoundException {
+		log.info("Entering into addAppointmentSlot of DoctorServiceImpl");
+
+		Optional<Doctor> doctorResponse = doctorRepository.findById(appointmentRequestDto.getDoctorId());
+		if (!doctorResponse.isPresent()) {
+			log.error("Exception occured in addAppointmentSlot:"+Constant.DOCTOR_NOT_FOUND);
+			throw new DoctorNotFoundException(Constant.DOCTOR_NOT_FOUND);
+		}
+		Optional<Hospital> hospitalResponse = hospitalRepository.findById(appointmentRequestDto.getHospitalId());
+		if (!hospitalResponse.isPresent()) {
+			log.error("Exception occured in addAppointmentSlot:"+Constant.HOSPITAL_NOT_FOUND);
+			throw new HospitalNotFoundException(Constant.HOSPITAL_NOT_FOUND);
+		}
+		//List<DoctorSlot> doctorSlotList = new ArrayList<>();
+		LocalTime fromTime = LocalTime.parse(appointmentRequestDto.getFromTime());
+		LocalTime toTime = LocalTime.parse(appointmentRequestDto.getSlotToTime());
+		while (fromTime.isBefore(toTime)) {
+			Optional<DoctorSlot> doctorSlotResponse=doctorSlotRepository.findByDoctorAndDateAndSlotTime(doctorResponse.get(),appointmentRequestDto.getDate(),fromTime);
+			
+			if(doctorSlotResponse.isPresent()) {
+				log.debug("Skipping the doctorSlot detaild:Record already exist");
+			}
+			else {
+			DoctorSlot doctorSlot = new DoctorSlot();
+			doctorSlot.setAvailability(Constant.AVAILABLE);
+			doctorSlot.setDate(appointmentRequestDto.getDate());
+			doctorSlot.setDoctor(doctorResponse.get());
+			doctorSlot.setHospital(hospitalResponse.get());
+			doctorSlot.setSlotTime(fromTime);
+			doctorSlotRepository.save(doctorSlot);
+			}
+			fromTime = fromTime.plusMinutes(Constant.SLOT_INTERVAL);
+			
+		}
+		log.debug("Exiting form addAppointmentSlot of DoctorServiceImpl");
+		return new ResponseDto();
+	}
+
+	/**
 	 * @author PriyaDharshini S.
-	 * @since 2020-02-12. This method will authenticate the user.
+	 * @since 2020-02-12.
+	 * 
+	 *        This method will authenticate the user.
 	 * @param loginDto - details of the user login
 	 * @return LoginResponseDto which has status message,statusCode and
 	 *         doctorDetails
@@ -61,7 +122,7 @@ public class DoctorServiceImpl implements DoctorService {
 
 	/**
 	 * @author PriyaDharshini S.
-	 * @since 2020-02-12. this method will get the details of the doctor.
+	 * @since 2020-02-12. This method will get the details of the doctor.
 	 * @param doctorId - unique id of doctor
 	 * @return DoctorDto which has doctorDetails
 	 * @throws DoctorNotFoundException it will throw the exception if the doctor is
@@ -110,6 +171,7 @@ public class DoctorServiceImpl implements DoctorService {
 			slotDto.setHospitalId(slots.getHospital().getHospitalId());
 			slotDto.setHospitalName(slots.getHospital().getHospitalName());
 			slotDto.setSlotTime(slots.getSlotTime());
+			slotDto.setDoctorSlotId(slots.getDoctorSlotId());
 			slotList.add(slotDto);
 		});
 
@@ -119,8 +181,10 @@ public class DoctorServiceImpl implements DoctorService {
 
 	/**
 	 * @author PriyaDharshini S.
-	 * @since 2020-02-12. this method will get the booked slots for the doctor on
-	 *        the doctor side.
+	 * @since 2020-02-12.
+	 * 
+	 * This method will get the booked slots for the doctor on the doctor
+	 *        side.
 	 * @param doctorId - unique id of doctor
 	 * @return list of AvailableSlotDto which has booked slots and details.
 	 * @throws DoctorNotFoundException it will throw the exception if the doctor is

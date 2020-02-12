@@ -2,12 +2,15 @@ package com.squad.housepital.service;
 
 import java.util.List;
 
+import com.squad.housepital.dto.AppointmentRequestDto;
 import com.squad.housepital.dto.AvailableSlotDto;
 import com.squad.housepital.dto.DoctorDto;
 import com.squad.housepital.dto.LoginRequestDto;
 import com.squad.housepital.dto.LoginResponseDto;
+import com.squad.housepital.dto.ResponseDto;
 import com.squad.housepital.dto.SlotDto;
 import com.squad.housepital.exception.DoctorNotFoundException;
+import com.squad.housepital.exception.HospitalNotFoundException;
 import com.squad.housepital.exception.SlotNotFoundException;
 
 public interface DoctorService {
@@ -20,4 +23,6 @@ public interface DoctorService {
 
 	List<AvailableSlotDto> getSlotsForDoctor(Integer doctorId) throws DoctorNotFoundException, SlotNotFoundException;
 
+	ResponseDto addAppointmentSlot(AppointmentRequestDto appointmentRequestDto)
+			throws DoctorNotFoundException, HospitalNotFoundException;
 }

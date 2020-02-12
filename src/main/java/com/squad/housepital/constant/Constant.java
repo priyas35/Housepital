@@ -14,11 +14,12 @@ public class Constant {
 	public static final String SLOT_NOT_FOUND = "Slot not found";
 	public static final String AUTHENTICATION_SUCCESSFUL = "Authentication Successful";
 	public static final String AUTHENTICATION_FAILED = "Authentication Failed";
-	
-	public static final String AVAILABLE = "Available";
-	public static final String UN_AVAILABLE = "Unavailable";
-	
-	public static final Integer SLOT_INTERVAL=15;
 
+	public static final Long SLOT_INTERVAL = 15L;
+
+	public static final String AVAILABLE = "Available";
+
+	public static final String UN_AVAILABLE = "Unavailable";
+	public static final String HOSPITAL_NOT_FOUND="Hospital not Found";
 
 }

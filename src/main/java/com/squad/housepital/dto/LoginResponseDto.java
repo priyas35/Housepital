@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class LoginResponseDto extends ResponseDto{
 	
-	private Integer userId;
-	private String userName;
+	private Integer doctorId;
+	private String doctorName;
 
 }

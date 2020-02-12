@@ -1,16 +1,12 @@
-package com.squad.housepital.entity;
+package com.squad.housepital.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
 
-import lombok.Data;
-
-@Data
-@Entity
-public class Doctor {
+@Getter
+@Setter
+public class DoctorDto {
 	
-	@Id
-	private Integer doctorId;
 	private String doctorName;
 	private Integer experience;
 	private String email;
@@ -20,6 +16,5 @@ public class Doctor {
 	private Long mobile;
 	private Double consultationFee;
 	private String password;
-	
 
 }

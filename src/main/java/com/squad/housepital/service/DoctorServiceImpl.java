@@ -67,7 +67,6 @@ public class DoctorServiceImpl implements DoctorService {
 			log.error("Exception occured in addAppointmentSlot:"+Constant.HOSPITAL_NOT_FOUND);
 			throw new HospitalNotFoundException(Constant.HOSPITAL_NOT_FOUND);
 		}
-		//List<DoctorSlot> doctorSlotList = new ArrayList<>();
 		LocalTime fromTime = LocalTime.parse(appointmentRequestDto.getFromTime());
 		LocalTime toTime = LocalTime.parse(appointmentRequestDto.getSlotToTime());
 		while (fromTime.isBefore(toTime)) {

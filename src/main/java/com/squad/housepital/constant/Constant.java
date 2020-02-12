@@ -1,7 +1,5 @@
 package com.squad.housepital.constant;
 
-import org.springframework.http.HttpStatus;
-
 public class Constant {
 	
 	private Constant() {
@@ -16,7 +14,10 @@ public class Constant {
 	public static final String AUTHENTICATION_SUCCESSFUL = "Authentication Successful";
 	public static final String AUTHENTICATION_FAILED = "Authentication Failed";
 	
-	public static final Integer SLOT_INTERVAL=15;
+	public static final Long SLOT_INTERVAL=15L;
+	
+	public static final String AVAILABLE = "Available";
+	
 
 
 }

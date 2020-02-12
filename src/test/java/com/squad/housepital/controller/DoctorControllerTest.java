@@ -14,13 +14,16 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.squad.housepital.dto.AppointmentRequestDto;
 import com.squad.housepital.dto.AvailableSlotDto;
 import com.squad.housepital.dto.DoctorDto;
 import com.squad.housepital.dto.LoginRequestDto;
 import com.squad.housepital.dto.LoginResponseDto;
+import com.squad.housepital.dto.ResponseDto;
 import com.squad.housepital.dto.SlotDto;
 import com.squad.housepital.entity.Doctor;
 import com.squad.housepital.exception.DoctorNotFoundException;
+import com.squad.housepital.exception.HospitalNotFoundException;
 import com.squad.housepital.exception.SlotNotFoundException;
 import com.squad.housepital.service.DoctorService;
 
@@ -41,7 +44,8 @@ public class DoctorControllerTest {
 	List<SlotDto> availableSlots = new ArrayList<>();
 	AvailableSlotDto AvailableSlotDto = new AvailableSlotDto();
 	List<AvailableSlotDto> bookedSlots = new ArrayList<>();
-	
+	AppointmentRequestDto appointmentRequestDto= new AppointmentRequestDto();
+	ResponseDto responseDto= new ResponseDto();
 	@Test
 	public void testAuthenticateDoctor() throws DoctorNotFoundException {
 		Mockito.when(doctorService.authenticateDoctor(loginRequestDto)).thenReturn(loginResponseDto);
@@ -89,6 +93,13 @@ public class DoctorControllerTest {
 	public void testGetSlotsForDoctorForDoctorNotFoundException() throws DoctorNotFoundException, SlotNotFoundException {
 		doctor.setDoctorId(null);
 	    doctorController.getSlotsForDoctor(null);
+	}
+	
+	@Test
+	public void testAddAppointmentSlot() throws DoctorNotFoundException, HospitalNotFoundException {
+		Mockito.when(doctorService.addAppointmentSlot(appointmentRequestDto)).thenReturn(responseDto);
+		ResponseEntity<ResponseDto> responseDto=doctorController.addAppointmentSlot(appointmentRequestDto);
+		assertEquals(HttpStatus.OK, responseDto.getStatusCode());
 	}
 
 }

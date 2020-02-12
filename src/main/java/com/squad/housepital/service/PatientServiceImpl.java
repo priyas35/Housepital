@@ -41,15 +41,15 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public ResponseDto bookSlot(BookSlotRequestDto bookSlotRequestDto) throws SlotNotFoundException {
 		log.info("PatientServiceImpl bookSlot ---> saving patient");
-		Patient patient = new Patient();
-		BeanUtils.copyProperties(bookSlotRequestDto, patient);
-		patient = patientRepository.save(patient);
-		log.info("PatientServiceImpl bookSlot ---> patient saved");
 		
 		Optional<DoctorSlot> doctorSlot = doctorSlotRepository.findById(bookSlotRequestDto.getDoctorSlotId());
 		if(!doctorSlot.isPresent()) {
 			throw new SlotNotFoundException(Constant.SLOT_NOT_FOUND);
 		}
+		Patient patient = new Patient();
+		BeanUtils.copyProperties(bookSlotRequestDto, patient);
+		patient = patientRepository.save(patient);
+		log.info("PatientServiceImpl bookSlot ---> patient saved");
 		log.info("PatientServiceImpl bookSlot ---> booking slot");
 		doctorSlot.get().setAvailability(Constant.UN_AVAILABLE);
 		doctorSlot.get().setPatient(patient);

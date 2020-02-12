@@ -13,5 +13,6 @@ public class SlotDto {
 	private LocalTime slotTime;
 	private Integer hospitalId;
 	private String hospitalName;
+	private Integer doctorSlotId;
 
 }

@@ -16,7 +16,7 @@ public class Hospital {
 	private String hospitalName;
 
 	@OneToOne
-	@JoinColumn(name="location_id")
+	@JoinColumn(name = "location_id")
 	private Location location;
 
 	private String address;

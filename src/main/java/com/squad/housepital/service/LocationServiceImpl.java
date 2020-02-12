@@ -1,10 +1,8 @@
 package com.squad.housepital.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
@@ -85,9 +83,9 @@ public class LocationServiceImpl implements LocationService {
 			List<DoctorSlot> doctorSlots = doctorSlotRepository.findByHospitalAndAvailability(hospital,
 					Constant.AVAILABLE);
 			
-			doctorSlots.forEach(doctorSlot -> {
-				doctorIds.add(doctorSlot.getDoctor().getDoctorId());
-			});
+			doctorSlots.forEach(doctorSlot -> 
+				doctorIds.add(doctorSlot.getDoctor().getDoctorId())
+			);
 		});
 		List<Doctor> doctors = doctorRepository.findAllById(doctorIds);
 		doctors.forEach(doctor -> {

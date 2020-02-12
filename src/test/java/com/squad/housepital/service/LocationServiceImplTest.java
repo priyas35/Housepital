@@ -21,6 +21,7 @@ import com.squad.housepital.entity.Doctor;
 import com.squad.housepital.entity.DoctorSlot;
 import com.squad.housepital.entity.Hospital;
 import com.squad.housepital.entity.Location;
+import com.squad.housepital.repository.DoctorRepository;
 import com.squad.housepital.repository.DoctorSlotRepository;
 import com.squad.housepital.repository.HospitalRepository;
 import com.squad.housepital.repository.LocationRepository;
@@ -40,13 +41,17 @@ public class LocationServiceImplTest {
 	@Mock
 	DoctorSlotRepository doctorSlotRepository;
 	
+	@Mock
+	DoctorRepository doctorRepository;
+	
 	Location location = new Location();
 	Hospital hospital = new Hospital();
 	List<Hospital> hospitals = new ArrayList<>();
 	DoctorSlot doctorSlot = new DoctorSlot();
 	List<DoctorSlot> doctorSlots = new ArrayList<>();
 	Doctor doctor = new Doctor();
-	
+	List<Doctor> doctors = new ArrayList<>();
+	List<Integer> ids = new ArrayList<>();
 	
 	@Before
 	public void setup() {
@@ -65,7 +70,7 @@ public class LocationServiceImplTest {
 		doctor.setPassword("test");
 		doctor.setRating(1.0);
 		doctor.setSpecialization("b");
-		
+		doctors.add(doctor);
 		doctorSlot.setAvailability("yes");
 		doctorSlot.setDate(LocalDate.now());
 		doctorSlot.setDoctor(doctor);
@@ -89,7 +94,8 @@ public class LocationServiceImplTest {
 	@Test
 	public void testSearchDoctorSlotNull() {
 		Mockito.when(hospitalRepository.findByLocation(Mockito.any())).thenReturn(hospitals);
-		Mockito.when(doctorSlotRepository.findByHospital(Mockito.any())).thenReturn(Optional.ofNullable(null));
+		Mockito.when(doctorSlotRepository.findByHospitalAndAvailability(Mockito.any(), Mockito.any())).thenReturn(doctorSlots);
+		Mockito.when(doctorRepository.findAllById(Mockito.any())).thenReturn(doctors);
 		Integer actual = locationService.searchDoctor(1, "test").size();
 		Integer expected = 0;
 		assertEquals(expected, actual);
@@ -98,7 +104,8 @@ public class LocationServiceImplTest {
 	@Test
 	public void testSearchDoctorNameNull() {
 		Mockito.when(hospitalRepository.findByLocation(Mockito.any())).thenReturn(hospitals);
-		Mockito.when(doctorSlotRepository.findByHospital(Mockito.any())).thenReturn(Optional.of(doctorSlot));
+		Mockito.when(doctorSlotRepository.findByHospitalAndAvailability(Mockito.any(), Mockito.any())).thenReturn(doctorSlots);
+		Mockito.when(doctorRepository.findAllById(Mockito.any())).thenReturn(doctors);
 		Integer actual = locationService.searchDoctor(1, "").get(0).getDoctorId();
 		Integer expected = 1;
 		assertEquals(expected, actual);
@@ -107,7 +114,8 @@ public class LocationServiceImplTest {
 	@Test
 	public void testSearchDoctorName() {
 		Mockito.when(hospitalRepository.findByLocation(Mockito.any())).thenReturn(hospitals);
-		Mockito.when(doctorSlotRepository.findByHospital(Mockito.any())).thenReturn(Optional.of(doctorSlot));
+		Mockito.when(doctorSlotRepository.findByHospitalAndAvailability(Mockito.any(), Mockito.any())).thenReturn(doctorSlots);
+		Mockito.when(doctorRepository.findAllById(Mockito.any())).thenReturn(doctors);
 		Integer actual = locationService.searchDoctor(1, "a").get(0).getDoctorId();
 		Integer expected = 1;
 		assertEquals(expected, actual);
@@ -116,7 +124,8 @@ public class LocationServiceImplTest {
 	@Test
 	public void testSearchDoctorSpecialization() {
 		Mockito.when(hospitalRepository.findByLocation(Mockito.any())).thenReturn(hospitals);
-		Mockito.when(doctorSlotRepository.findByHospital(Mockito.any())).thenReturn(Optional.of(doctorSlot));
+		Mockito.when(doctorSlotRepository.findByHospitalAndAvailability(Mockito.any(), Mockito.any())).thenReturn(doctorSlots);
+		Mockito.when(doctorRepository.findAllById(Mockito.any())).thenReturn(doctors);
 		Integer actual = locationService.searchDoctor(1, "b").get(0).getDoctorId();
 		Integer expected = 1;
 		assertEquals(expected, actual);
@@ -125,7 +134,8 @@ public class LocationServiceImplTest {
 	@Test
 	public void testSearchDoctorEmail() {
 		Mockito.when(hospitalRepository.findByLocation(Mockito.any())).thenReturn(hospitals);
-		Mockito.when(doctorSlotRepository.findByHospital(Mockito.any())).thenReturn(Optional.of(doctorSlot));
+		Mockito.when(doctorSlotRepository.findByHospitalAndAvailability(Mockito.any(), Mockito.any())).thenReturn(doctorSlots);
+		Mockito.when(doctorRepository.findAllById(Mockito.any())).thenReturn(doctors);
 		Integer actual = locationService.searchDoctor(1, "c").get(0).getDoctorId();
 		Integer expected = 1;
 		assertEquals(expected, actual);
@@ -134,7 +144,8 @@ public class LocationServiceImplTest {
 	@Test
 	public void testSearchDoctorNone() {
 		Mockito.when(hospitalRepository.findByLocation(Mockito.any())).thenReturn(hospitals);
-		Mockito.when(doctorSlotRepository.findByHospital(Mockito.any())).thenReturn(Optional.of(doctorSlot));
+		Mockito.when(doctorSlotRepository.findByHospitalAndAvailability(Mockito.any(), Mockito.any())).thenReturn(doctorSlots);
+		Mockito.when(doctorRepository.findAllById(Mockito.any())).thenReturn(doctors);
 		Integer actual = locationService.searchDoctor(1, "d").size();
 		Integer expected = 0;
 		assertEquals(expected, actual);

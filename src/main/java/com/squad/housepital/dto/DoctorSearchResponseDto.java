@@ -14,6 +14,5 @@ public class DoctorSearchResponseDto {
 	private String imageUrl;
 	private Long mobile;
 	private Double consultationFee;
-	private String password;
 
 }

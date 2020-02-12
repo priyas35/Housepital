@@ -20,5 +20,6 @@ public class Constant {
 	public static final String AVAILABLE = "Available";
 
 	public static final String UN_AVAILABLE = "Unavailable";
+	public static final String HOSPITAL_NOT_FOUND="Hospital not Found";
 
 }

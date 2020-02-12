@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -101,7 +102,7 @@ public class DoctorController {
 	 */
 	@GetMapping("/{doctorId}")
 	public ResponseEntity<DoctorDto> getDoctorDetails(@PathVariable Integer doctorId) throws DoctorNotFoundException {
-		if (doctorId == null) {
+		if (ObjectUtils.isEmpty(doctorId)) {
 			log.debug("Exception occurred in DoctorController getDoctorDetails method:" + Constant.DOCTOR_NOT_FOUND);
 			throw new DoctorNotFoundException(Constant.DOCTOR_NOT_FOUND);
 		}

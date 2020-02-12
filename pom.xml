@@ -21,7 +21,9 @@
 			**/entity/*,
 			**/config/*,
 			**/constant/*,
-			**/exception/*
+			**/GlobalExceptionHandler.java,
+			**/HousepitalApplication.java,
+			
 		</sonar.coverage.exclusions>
 	</properties>
 

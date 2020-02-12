@@ -2,6 +2,7 @@ package com.squad.housepital.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.squad.housepital.dto.DoctorSearchResponseDto;
+import com.squad.housepital.entity.DoctorSlot;
 import com.squad.housepital.entity.Hospital;
 import com.squad.housepital.entity.Location;
 import com.squad.housepital.repository.DoctorSlotRepository;
@@ -69,9 +71,12 @@ public class LocationServiceImpl implements LocationService {
 
 		hospitals.forEach(hospital -> {
 			DoctorSearchResponseDto doctorSearchResponseDto = new DoctorSearchResponseDto();
-			BeanUtils.copyProperties(doctorSlotRepository.findByHospital(hospital).getDoctor(),
-					doctorSearchResponseDto);
-			doctorDtos.add(doctorSearchResponseDto);
+			Optional<DoctorSlot> doctorSlot = doctorSlotRepository.findByHospital(hospital);
+			if (doctorSlot.isPresent()) {
+				BeanUtils.copyProperties(doctorSlot.get().getDoctor(), doctorSearchResponseDto);
+				doctorDtos.add(doctorSearchResponseDto);
+			}
+
 		});
 		if (name.isEmpty()) {
 			log.info("LocationServiceImpl searchDoctor ---> getting doctors for particular location without filter");

@@ -19,7 +19,6 @@ public class HospitalServiceImpl implements HospitalService{
 	
 	public List<Hospital> getHospitalList() {
 		log.info("Entering into getHospitalList of HospitalServiceImpl");
-		List<Hospital> hospitalResponseList=hospitalRepository.findAll();
-		return hospitalResponseList;
+		return hospitalRepository.findAll();
 	}	
 }

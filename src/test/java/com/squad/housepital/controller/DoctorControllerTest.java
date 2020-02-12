@@ -92,7 +92,7 @@ public class DoctorControllerTest {
 	@Test(expected = DoctorNotFoundException.class)
 	public void testGetSlotsForDoctorForDoctorNotFoundException() throws DoctorNotFoundException, SlotNotFoundException {
 		doctor.setDoctorId(null);
-	    doctorController.getSlotsForPatient(null);
+	    doctorController.getSlotsForDoctor(null);
 	}
 	
 	@Test

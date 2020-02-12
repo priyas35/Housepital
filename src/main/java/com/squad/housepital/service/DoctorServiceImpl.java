@@ -110,6 +110,7 @@ public class DoctorServiceImpl implements DoctorService {
 			slotDto.setHospitalId(slots.getHospital().getHospitalId());
 			slotDto.setHospitalName(slots.getHospital().getHospitalName());
 			slotDto.setSlotTime(slots.getSlotTime());
+			slotDto.setDoctorSlotId(slots.getDoctorSlotId());
 			slotList.add(slotDto);
 		});
 

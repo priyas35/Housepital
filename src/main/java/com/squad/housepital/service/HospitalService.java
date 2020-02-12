@@ -2,7 +2,6 @@ package com.squad.housepital.service;
 
 import java.util.List;
 
-import com.squad.housepital.dto.ResponseDto;
 import com.squad.housepital.entity.Hospital;
 
 public interface HospitalService {

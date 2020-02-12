@@ -2,10 +2,13 @@ package com.squad.housepital.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,10 +18,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.squad.housepital.constant.Constant;
+import com.squad.housepital.dto.AppointmentRequestDto;
 import com.squad.housepital.dto.AvailableSlotDto;
 import com.squad.housepital.dto.DoctorDto;
 import com.squad.housepital.dto.LoginRequestDto;
 import com.squad.housepital.dto.LoginResponseDto;
+import com.squad.housepital.dto.ResponseDto;
 import com.squad.housepital.dto.SlotDto;
 import com.squad.housepital.entity.Doctor;
 import com.squad.housepital.entity.DoctorSlot;
@@ -26,9 +31,13 @@ import com.squad.housepital.entity.Hospital;
 import com.squad.housepital.entity.Location;
 import com.squad.housepital.entity.Patient;
 import com.squad.housepital.exception.DoctorNotFoundException;
+import com.squad.housepital.exception.HospitalNotFoundException;
 import com.squad.housepital.exception.SlotNotFoundException;
 import com.squad.housepital.repository.DoctorRepository;
 import com.squad.housepital.repository.DoctorSlotRepository;
+import com.squad.housepital.repository.HospitalRepository;
+
+
 
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class DoctorServiceTest {
@@ -41,6 +50,9 @@ public class DoctorServiceTest {
 
 	@Mock
 	DoctorSlotRepository doctorSlotRepository;
+	
+	@Mock
+	HospitalRepository hospitalRepository;
 
 	LoginRequestDto loginRequestDto = new LoginRequestDto();
 	LoginResponseDto loginResponseDto = new LoginResponseDto();
@@ -55,7 +67,8 @@ public class DoctorServiceTest {
 	Hospital hospital = new Hospital();
 	Location location = new Location();
 	Patient patient = new Patient();
-
+	AppointmentRequestDto appointmentRequestDto= new AppointmentRequestDto();
+	ResponseDto responseDto= new ResponseDto();
 	@Before
 	public void init() {
 		doctor.setDoctorId(1);
@@ -75,7 +88,12 @@ public class DoctorServiceTest {
 		doctorSlot.setPatient(patient);
 		doctorSlot.setAvailability(Constant.AVAILABLE);
 		doctorSlots.add(doctorSlot);
-
+		
+		appointmentRequestDto.setDoctorId(1);
+		appointmentRequestDto.setHospitalId(1);
+		appointmentRequestDto.setFromTime("18:00");
+		appointmentRequestDto.setSlotToTime("19:00");
+		appointmentRequestDto.setDate(LocalDate.parse("2019-02-12"));
 	}
 
 	@Test
@@ -160,5 +178,34 @@ public class DoctorServiceTest {
 				.thenReturn(doctorSlots);
 		doctorServiceImpl.getSlotsForDoctor(1);
 	}
+	
+	@Test(expected=DoctorNotFoundException.class)
+	public void testAddAppointmentSlotDoctorNotFound() throws DoctorNotFoundException, HospitalNotFoundException {
+		Mockito.when(doctorRepository.findById(6)).thenReturn(Optional.of(doctor));
+		doctorServiceImpl.addAppointmentSlot(appointmentRequestDto);
+	}
 
+	@Test(expected=HospitalNotFoundException.class)
+	public void testAddAppointmentSlotHospitalNotFound() throws DoctorNotFoundException, HospitalNotFoundException {
+		Mockito.when(doctorRepository.findById(1)).thenReturn(Optional.of(doctor));
+		Mockito.when(hospitalRepository.findById(6)).thenReturn(Optional.of(hospital));
+		doctorServiceImpl.addAppointmentSlot(appointmentRequestDto);
+	}
+	
+	@Test
+	public void testAddAppointmentSlot() throws DoctorNotFoundException, HospitalNotFoundException {
+		Mockito.when(doctorRepository.findById(1)).thenReturn(Optional.of(doctor));
+		Mockito.when(hospitalRepository.findById(1)).thenReturn(Optional.of(hospital));
+		ResponseDto responseDto=doctorServiceImpl.addAppointmentSlot(appointmentRequestDto);
+		Assert.assertNotNull(responseDto);
+	}
+	
+	@Test
+	public void testAddAppointmentSlotAlreadyPresent()throws DoctorNotFoundException, HospitalNotFoundException {
+		Mockito.when(doctorRepository.findById(1)).thenReturn(Optional.of(doctor));
+		Mockito.when(hospitalRepository.findById(1)).thenReturn(Optional.of(hospital));
+		Mockito.when(doctorSlotRepository.findByDoctorAndDateAndSlotTime(doctor,LocalDate.parse("2019-02-12"),LocalTime.parse("18:00"))).thenReturn(Optional.of(doctorSlot));
+		ResponseDto responseDto=doctorServiceImpl.addAppointmentSlot(appointmentRequestDto);
+		Assert.assertNotNull(responseDto);
+	}
 }

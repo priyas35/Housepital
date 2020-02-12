@@ -20,12 +20,10 @@ import com.squad.housepital.repository.DoctorSlotRepository;
 import com.squad.housepital.repository.HospitalRepository;
 import com.squad.housepital.repository.LocationRepository;
 
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-@Data
 public class LocationServiceImpl implements LocationService {
 
 	@Autowired
@@ -36,10 +34,9 @@ public class LocationServiceImpl implements LocationService {
 
 	@Autowired
 	DoctorSlotRepository doctorSlotRepository;
-	
+
 	@Autowired
 	DoctorRepository doctorRepository;
-	
 
 	/**
 	 * 
@@ -82,10 +79,8 @@ public class LocationServiceImpl implements LocationService {
 
 			List<DoctorSlot> doctorSlots = doctorSlotRepository.findByHospitalAndAvailability(hospital,
 					Constant.AVAILABLE);
-			
-			doctorSlots.forEach(doctorSlot -> 
-				doctorIds.add(doctorSlot.getDoctor().getDoctorId())
-			);
+
+			doctorSlots.forEach(doctorSlot -> doctorIds.add(doctorSlot.getDoctor().getDoctorId()));
 		});
 		List<Doctor> doctors = doctorRepository.findAllById(doctorIds);
 		doctors.forEach(doctor -> {
@@ -103,7 +98,5 @@ public class LocationServiceImpl implements LocationService {
 						|| doctorDto.getSpecialization().contains(name) || doctorDto.getEmail().contains(name))
 				.collect(Collectors.toList());
 	}
-	
-
 
 }
